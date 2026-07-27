@@ -17,6 +17,15 @@ inputs:
   github_token:
     description: 'GitHub Token'
     required: true
+  # 新增：经济学人订阅凭证
+  economist_username:
+    description: 'Economist subscription username (email)'
+    required: false
+    default: ''
+  economist_password:
+    description: 'Economist subscription password'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -26,17 +35,7 @@ runs:
       with:
         python-version: "3.12"
 
-    # ========== 添加修复：设置DNS ==========
-    - name: Fix DNS resolution
-      shell: bash
-      run: |
-        echo "Setting DNS servers..."
-        echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-        echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf
-        echo "DNS configuration:"
-        cat /etc/resolv.conf
-
-    - name: Install Calibre
+    - name: Install system dependencies
       shell: bash
       run: |
         sudo apt-get update
@@ -55,47 +54,64 @@ runs:
           libpulse0 \
           libxrender1 \
           libdbus-1-3 \
-          wget && \
+          wget \
+          xdg-utils && \
         (sudo apt-get install -y libasound2 || sudo apt-get install -y libasound2t64)
-        
+
+    - name: Install Calibre
+      shell: bash
+      run: |
         url=https://download.calibre-ebook.com/linux-installer.sh
         sudo -v && wget -nv -O- $url | sudo sh /dev/stdin
 
-    # ========== 注释掉/移除 WARP 步骤 ==========
-    # - name: Setup WARP
-    #   if: env.ACT != 'true'
-    #   uses: fscarmen/warp-on-actions@v1.1
-    #   with:
-    #     stack: dual
+    - name: Setup WARP
+      if: env.ACT != 'true'
+      uses: fscarmen/warp-on-actions@v1.1
+      with:
+        stack: dual
 
-    # ========== 可选：添加网络测试 ==========
+    - name: Fix DNS resolution after WARP
+      shell: bash
+      run: |
+        echo "=== Fixing DNS resolution ==="
+        echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+        echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf
+        echo "Current DNS configuration:"
+        cat /etc/resolv.conf
+
     - name: Test network connectivity
       shell: bash
       run: |
-        echo "=== Testing connectivity ==="
-        echo "DNS lookup:"
-        nslookup economist.com || echo "DNS lookup failed"
-        echo "HTTP test:"
-        curl -I -L --max-time 10 https://www.economist.com || echo "HTTP test failed"
-        echo "GraphQL test:"
-        curl -I -L --max-time 10 https://cp2-graphql-gateway.p.aws.economist.com/graphql || echo "GraphQL test failed"
-        echo "Public IP:"
-        curl -s ifconfig.me || echo "IP check failed"
+        echo "=== Network Status ==="
+        echo "Public IP: $(curl -s ifconfig.me || echo 'failed')"
+        echo "Testing DNS resolution:"
+        nslookup economist.com || echo "⚠️ DNS lookup failed"
+        echo "Testing HTTP connectivity:"
+        curl -I -L --max-time 10 https://www.economist.com || echo "⚠️ HTTP test failed"
 
     - name: Run Processing Script
       shell: bash
       env:
-        # 如果有订阅，通过环境变量传递
-        ECONOMIST_USERNAME: ${{ secrets.ECONOMIST_USERNAME }}
-        ECONOMIST_PASSWORD: ${{ secrets.ECONOMIST_PASSWORD }}
+        # 从 inputs 读取凭证（由 workflow 传入）
+        ECONOMIST_USERNAME: ${{ inputs.economist_username }}
+        ECONOMIST_PASSWORD: ${{ inputs.economist_password }}
       run: |
-        # 添加重试逻辑
-        for i in {1..3}; do
-          echo "Attempt $i of 3..."
-          python helper/main.py ${{ inputs.mag_id }} "${{ inputs.issue_date }}" && break
-          echo "Attempt $i failed, waiting 30 seconds..."
-          sleep 30
-        done
+        echo "=== Running processing script ==="
+        echo "Magazine ID: ${{ inputs.mag_id }}"
+        echo "Issue Date: ${{ inputs.issue_date }}"
+        
+        # 对 The Economist 添加重试逻辑
+        if [ "${{ inputs.mag_id }}" = "te" ]; then
+          echo "⚠️ The Economist: using retry logic"
+          for i in {1..3}; do
+            echo "Attempt $i of 3..."
+            python helper/main.py ${{ inputs.mag_id }} "${{ inputs.issue_date }}" && break
+            echo "Attempt $i failed, waiting 30 seconds..."
+            sleep 30
+          done
+        else
+          python helper/main.py ${{ inputs.mag_id }} "${{ inputs.issue_date }}"
+        fi
 
     - name: Upload Artifact
       if: env.ACT != 'true'
