@@ -26,6 +26,16 @@ runs:
       with:
         python-version: "3.12"
 
+    # ========== 添加修复：设置DNS ==========
+    - name: Fix DNS resolution
+      shell: bash
+      run: |
+        echo "Setting DNS servers..."
+        echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+        echo "nameserver 1.1.1.1" | sudo tee -a /etc/resolv.conf
+        echo "DNS configuration:"
+        cat /etc/resolv.conf
+
     - name: Install Calibre
       shell: bash
       run: |
@@ -51,15 +61,41 @@ runs:
         url=https://download.calibre-ebook.com/linux-installer.sh
         sudo -v && wget -nv -O- $url | sudo sh /dev/stdin
 
-    - name: Setup WARP
-      if: env.ACT != 'true'
-      uses: fscarmen/warp-on-actions@v1.1
-      with:
-        stack: dual
+    # ========== 注释掉/移除 WARP 步骤 ==========
+    # - name: Setup WARP
+    #   if: env.ACT != 'true'
+    #   uses: fscarmen/warp-on-actions@v1.1
+    #   with:
+    #     stack: dual
+
+    # ========== 可选：添加网络测试 ==========
+    - name: Test network connectivity
+      shell: bash
+      run: |
+        echo "=== Testing connectivity ==="
+        echo "DNS lookup:"
+        nslookup economist.com || echo "DNS lookup failed"
+        echo "HTTP test:"
+        curl -I -L --max-time 10 https://www.economist.com || echo "HTTP test failed"
+        echo "GraphQL test:"
+        curl -I -L --max-time 10 https://cp2-graphql-gateway.p.aws.economist.com/graphql || echo "GraphQL test failed"
+        echo "Public IP:"
+        curl -s ifconfig.me || echo "IP check failed"
 
     - name: Run Processing Script
       shell: bash
-      run: python helper/main.py ${{ inputs.mag_id }} "${{ inputs.issue_date }}"
+      env:
+        # 如果有订阅，通过环境变量传递
+        ECONOMIST_USERNAME: ${{ secrets.ECONOMIST_USERNAME }}
+        ECONOMIST_PASSWORD: ${{ secrets.ECONOMIST_PASSWORD }}
+      run: |
+        # 添加重试逻辑
+        for i in {1..3}; do
+          echo "Attempt $i of 3..."
+          python helper/main.py ${{ inputs.mag_id }} "${{ inputs.issue_date }}" && break
+          echo "Attempt $i failed, waiting 30 seconds..."
+          sleep 30
+        done
 
     - name: Upload Artifact
       if: env.ACT != 'true'
