@@ -12,7 +12,7 @@ This file is generated automatically from GitHub Releases. Issues are sorted by 
 
 | Issue date | PDF | EPUB | Release |
 | --- | --- | --- | --- |
-| — | — | — | — |
+| 2026-08-03 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20260803/20260803-The-New-Yorker-Magazine.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20260803/20260803-The-New-Yorker-Magazine.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/ny-20260803) |
 
 ## TIME Magazine
 
@@ -20,4 +20,4 @@ This file is generated automatically from GitHub Releases. Issues are sorted by 
 | --- | --- | --- | --- |
 | — | — | — | — |
 
-_Total issues: 0._
+_Total issues: 1._
