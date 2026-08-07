@@ -6,6 +6,7 @@ This file is generated automatically from GitHub Releases. Issues are sorted by 
 
 | Issue date | PDF | EPUB | Release |
 | --- | --- | --- | --- |
+| 2026-08-08 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/te-20260808/20260808-The-Economist.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/te-20260808/20260808-The-Economist.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/te-20260808) |
 | 2026-08-01 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/te-20260801/20260801-The-Economist.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/te-20260801/20260801-The-Economist.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/te-20260801) |
 | 2026-07-25 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/te-20260725/20260725-The-Economist.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/te-20260725/20260725-The-Economist.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/te-20260725) |
 
@@ -22,4 +23,4 @@ This file is generated automatically from GitHub Releases. Issues are sorted by 
 | --- | --- | --- | --- |
 | — | — | — | — |
 
-_Total issues: 4._
+_Total issues: 5._
