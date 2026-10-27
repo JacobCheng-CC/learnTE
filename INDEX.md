@@ -17,6 +17,7 @@ This file is generated automatically from GitHub Releases. Issues are sorted by 
 
 | Issue date | PDF | EPUB | Release |
 | --- | --- | --- | --- |
+| 2026-11-02 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261102/20261102-The-New-Yorker-Magazine.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261102/20261102-The-New-Yorker-Magazine.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/ny-20261102) |
 | 2026-10-26 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261026/20261026-The-New-Yorker-Magazine.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261026/20261026-The-New-Yorker-Magazine.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/ny-20261026) |
 | 2026-10-19 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261019/20261019-The-New-Yorker-Magazine.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261019/20261019-The-New-Yorker-Magazine.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/ny-20261019) |
 | 2026-10-12 | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261012/20261012-The-New-Yorker-Magazine.pdf) | [Download](https://github.com/JacobCheng-CC/learnTE/releases/download/ny-20261012/20261012-The-New-Yorker-Magazine.epub) | [View](https://github.com/JacobCheng-CC/learnTE/releases/tag/ny-20261012) |
@@ -36,4 +37,4 @@ This file is generated automatically from GitHub Releases. Issues are sorted by 
 | --- | --- | --- | --- |
 | — | — | — | — |
 
-_Total issues: 18._
+_Total issues: 19._
